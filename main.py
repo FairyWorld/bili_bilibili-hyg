@@ -414,7 +414,7 @@ class HygException(Exception):
 class BilibiliHyg:
         def __init__(self, config):
             self.config = config
-            self.gaia_vtoken = None
+            self.config["gaia_vtoken"] = None
             self.session = requests.Session()
             self.headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) BHYG/0.6.3",
@@ -627,8 +627,8 @@ class BilibiliHyg:
         
         def get_prepare(self):
             url = "https://show.bilibili.com/api/ticket/order/prepare?project_id="+self.config["project_id"]
-            if self.gaia_vtoken:
-                url += "&gaia_vtoken="+self.gaia_vtoken
+            if self.config["gaia_vtoken"]:
+                url += "&gaia_vtoken="+self.config["gaia_vtoken"]
             data = {
                 "project_id": self.config["project_id"],
                 "screen_id": self.config["screen_id"],
@@ -666,12 +666,14 @@ class BilibiliHyg:
                         self.captcha_data["csrf"] = self.headers["Cookie"][self.headers["Cookie"].index("bili_jct") + 9:self.headers["Cookie"].index("bili_jct") + 41]
                         self.captcha_data["token"] = token
                         success = self.session.post("https://api.bilibili.com/x/gaia-vgate/v1/validate", headers=self.headers, data=self.captcha_data).json()["data"]["is_valid"]
-                        self.gaia_vtoken = token
+                        self.config["gaia_vtoken"] = token
                         self.captcha_data = None
                         if self.headers["Cookie"].find("x-bili-gaia-vtoken") != -1:
                             self.headers["Cookie"] = self.headers["Cookie"].split("; x-bili-gaia-vtoken")[0]
                         self.headers["Cookie"] += "; x-bili-gaia-vtoken="+ token
                         f.truncate(0)
+                        with open("config.json", "w", encoding="utf-8") as f:
+                            json.dump(self.config, f)
                         return success
 
         def get_token(self):
@@ -1230,7 +1232,7 @@ def main():
                 os.mkdir("data")
             # 判断是否存在config.json
             if os.path.exists("config.json"):
-                is_use_config = input("已存在上一次的配置文件，是否沿用全部或只沿用登录信息？(Y/l/n)")
+                is_use_config = input("已存在上一次的配置文件，是否沿用全部或只沿用登录信息（包括风控信息）？(Y/l/n)")
                 if is_use_config == "n":
                     logger.info("重新配置")
                     config = {}
@@ -1240,6 +1242,7 @@ def main():
                         config = {}
                         try:
                             config["cookie"] = json.load(f)["cookie"]
+                            config["gaia_vtoken"] = json.load(f)["gaia_vtoken"]
                         except:
                             logger.error("读取cookie失败，重新配置")
                             config = {}
@@ -1305,4 +1308,4 @@ if __name__ == "__main__":
     if client is not None:
         client.close(timeout=2.0)
     logger.info("已安全退出，您可以关闭窗口")
-    exit()
+    time.sleep(10)

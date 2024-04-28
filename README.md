@@ -50,6 +50,16 @@ BHYG应用程序开发者（以下简称“开发者”）在此特别提醒用�
 
 若您为个人用户，您还将面临GitHub的信息收集，详见[GitHub Privacy Policy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)。
 
+## Star History
+
+<a href="https://star-history.com/#ZianTT/BHYG&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ZianTT/BHYG&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ZianTT/BHYG&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ZianTT/BHYG&type=Date" />
+ </picture>
+</a>
+
 ## 耻辱柱
 
 - 【暂留】

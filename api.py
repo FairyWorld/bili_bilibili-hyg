@@ -429,8 +429,8 @@ class BilibiliHyg:
             if(result["errno"] == 100009):
                 logger.warning("无票")
             elif(result["errno"] == 3):
-                logger.warning("慢一点（强制5秒）等待4.95秒")
-                time.sleep(4.95)
+                logger.warning("慢一点（强制5秒）等待4.98秒")
+                time.sleep(4.98)
             elif(result["errno"] == 100001):
                 logger.warning("小电视速率限制")
             elif(result["errno"] == 100016):
